@@ -26,7 +26,7 @@ lista_desordenada = [-2, 1, 3, -5, 1]
 # print(lista_ordenada)
 
 
-
+## ESTA FUNCION IMPRIME PASO A PASO EL ALGORITMO
 def quick_sort_print(lista, nivel=0):
     print(f'{"  " * nivel}Nivel {nivel}')
     print(f'{"  " * nivel}Lista actual: {lista}')
