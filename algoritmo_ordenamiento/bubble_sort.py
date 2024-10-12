@@ -11,7 +11,7 @@ def bubble_sort(lista):
     return lista
 
 
-lista_desordenada = [5, 2, 8, 0, 3, 1, 5]
+lista_desordenada = [-2, 1, 3, -5, 1]
 
 # print(lista_desordenada)
 # lista_ordenada = bubble_sort(lista_desordenada)

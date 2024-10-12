@@ -20,7 +20,7 @@ def quick_sort(lista):
     return quick_sort(menores) + iguales + quick_sort(mayores)
 
 
-lista_desordenada = [5, 2, 8, 0, 3, 1, 5]
+lista_desordenada = [-2, 1, 3, -5, 1]
 # print(lista_desordenada)
 # lista_ordenada = quick_sort(lista_desordenada)
 # print(lista_ordenada)
