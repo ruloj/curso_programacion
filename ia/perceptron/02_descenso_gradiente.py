@@ -1,32 +1,25 @@
 import numpy as np
 
-# Función para predecir con el perceptrón
-def predict(inputs, weights):
-    # Producto punto entre las entradas y los pesos + el bias (weights[0])
-    summation = np.dot(inputs, weights[1:]) + weights[0]
-    return 1 if summation > 0 else 0
 
-# Función de entrenamiento utilizando descenso de gradiente
+def predict(inputs,weights):
+    summation = np.dot(inputs, weights[1:]) + weights[0]
+    return 1 if summation >= 0 else 0
+
+# Derivada del MSE con respecto a los pesos
+def compute_gradient(inputs, label, prediction):
+    error = label - prediction
+    gradient = -2 * error * np.append([1], inputs)  # Incluye el sesgo (1) para actualizarlo
+    return gradient
+
 def train_perceptron(training_data, labels, learning_rate=0.01, epochs=100):
     input_size = training_data.shape[1]
-    # Inicializamos los pesos aleatoriamente (incluyendo el bias como weights[0])
-    weights = np.random.rand(input_size + 1)  # +1 para el término de bias
-    for epoch in range(epochs):
-        total_error = 0
+    weights = np.random.rand(input_size + 1)  # +1 para el término de sesgo
+    for _ in range(epochs):
         for inputs, label in zip(training_data, labels):
             prediction = predict(inputs, weights)
-            error = label - prediction
-            # Actualizamos los pesos usando el error y el learning_rate
-            weights[1:] += learning_rate * error * inputs
-            weights[0] += learning_rate * error  # Actualizamos el bias
-            total_error += abs(error)  # Acumulamos el error absoluto para analizar el desempeño
-        # print(f'Epoch {epoch+1}/{epochs}, Total Error: {total_error}')
-        # Si el error total es 0, el perceptrón ya ha convergido
-        if total_error == 0:
-            break
+            gradient = compute_gradient(inputs, label, prediction)
+            weights -= learning_rate * gradient  # Actualiza los pesos usando el gradiente
     return weights
-
-
 
 
 
