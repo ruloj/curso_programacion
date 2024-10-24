@@ -2,28 +2,28 @@ import pandas as pd
 import numpy as np
 
 # Función para calcular las probabilidades a priori
-def prior_prob(df, label_column):
-    return df[label_column].value_counts(normalize=True)
+def prior_prob(data, target_col):
+    return data[target_col].value_counts(normalize=True)
 
 # Función para calcular las probabilidades condicionales
-def conditional_prob(df, feature_column, feature_value, label_column, label_value):
+def conditional_prob(data, feature_column, feature_value, target_col, label_value):
     # Subconjunto donde la clase es igual a `label_value`
-    subset = df[df[label_column] == label_value]
+    subset = data[data[target_col] == label_value]
     # Aplicamos suavizado de Laplace
-    return (subset[feature_column].value_counts().get(feature_value, 0) + 1) / (len(subset) + df[feature_column].nunique())
+    return (subset[feature_column].value_counts().get(feature_value, 0) + 1) / (len(subset) + data[feature_column].nunique())
 
 # Función para predecir la clase de una instancia
-def predict(instance, df, label_column):
-    classes = df[label_column].unique()
+def predict(example, data, target_col):
+    classes = data[target_col].unique()
     class_probs = {}
 
     for label in classes:
         # Inicializamos la probabilidad con la a priori
-        class_probs[label] = np.log(prior_prob(df, label_column).get(label))
+        class_probs[label] = prior_prob(data, target_col).get(label)
 
         # Multiplicamos por las probabilidades condicionales de cada característica
-        for feature_column, feature_value in instance.items():
-            class_probs[label] += np.log(conditional_prob(df, feature_column, feature_value, label_column, label))
+        for feature_column, feature_value in example.items():
+            class_probs[label] += conditional_prob(data, feature_column, feature_value, target_col, label)
 
     # Retornamos la clase con la mayor probabilidad
     return max(class_probs, key=class_probs.get)
